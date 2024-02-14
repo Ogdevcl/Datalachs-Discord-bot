@@ -1,0 +1,7 @@
+{
+    "token": "",  # Discord-Token
+    "guild_id": "",  # ID den Discord-Server, in der der Bot funktionieren soll
+    "service_id": "",  # ServiceId des Dienstes
+    "api_token": "",  # API-Token von Datalix https://datalix.de/cp/apikeys
+    "allowed_user_id": 000  # Benutzer-ID, die für privilegierte Aktionen autorisiert ist
+}
