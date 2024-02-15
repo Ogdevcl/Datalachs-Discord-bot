@@ -60,6 +60,7 @@ Deploy the bot on a server with appropriate permissions and use the slash comman
 - `/reboot` - Restarts the server.
 - `/ping` - Displays bot latency.
 - `/ddos` - Shows recent DDoS attack details.
+- `/backups` - Shows Backups.
 
 ## Project Status
 
