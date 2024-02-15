@@ -118,6 +118,34 @@ async def ddos(interaction: nextcord.Interaction):
     else:
         await interaction.response.send_message("Du hast keine Berechtigung, diesen Befehl auszuführen.", ephemeral=True)
 
+
+async def get_backup_list():
+    async with aiohttp.ClientSession() as session:
+        api_url = f"https://backend.datalix.de/v1/service/{service_id}/backup?token={api_token}"
+        async with session.get(api_url) as response:
+            if response.status == 200:
+                return await response.json()
+            else:
+                return None
+
+# Slash-Befehl zur Anzeige der Backup-Liste
+@bot.slash_command(name="list_backups", description="Zeigt eine Liste der Backups", guild_ids=[guild_id])
+async def list_backups(interaction: nextcord.Interaction):
+    if interaction.user.id == allowed_user_id:
+        await interaction.response.defer()
+        backups = await get_backup_list()
+        if backups:
+            embed = nextcord.Embed(title="Backup Liste", description="Liste der verfügbaren Backups", color=nextcord.Color.blue())
+            for backup in backups:
+                backup_name = backup.get("displayname", "Unbekannter Backup-Name")
+                created_on = backup.get("created_on", "Unbekanntes Erstellungsdatum")
+                embed.add_field(name=backup_name, value=f"Erstellt am: {created_on}", inline=False)
+            await interaction.followup.send(embed=embed)
+        else:
+            await interaction.followup.send("Fehler beim Abrufen der Backup-Liste. Bitte versuche es später erneut.")
+    else:
+        await interaction.response.send_message("Du hast keine Berechtigung, diesen Befehl auszuführen.", ephemeral=True)
+
 # Aufgabe zum Ändern des Bot-Status alle 10 Sekunden
 @tasks.loop(seconds=10)
 async def change_status():
